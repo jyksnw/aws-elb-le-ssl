@@ -1,0 +1,48 @@
+{
+  "name": "aws-elb-le-ssl",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.211.0",
+    "babel-runtime": "^6.26.0",
+    "bluebird": "^3.5.1",
+    "dotyaml": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-3": "^6.24.1",
+    "depcheck": "^0.6.9",
+    "eslint": "^4.19.0",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "husky": "^0.15.0-rc.11",
+    "serverless-webpack": "^5.1.0",
+    "snyk": "^1.70.2",
+    "standard": "^11.0.1",
+    "webpack": "^4.1.1",
+    "webpack-node-externals": "^1.6.0"
+  },
+  "snyk": true,
+  "scripts": {
+    "run": "babel-node index.js",
+    "deploy": "standard -fix && sls deploy -v",
+    "update": "standard -fix && sls deploy function -f update_certificate",
+    "invoke": "sls invoke -f update_certificate -l",
+    "test": "standard && depcheck . --ignore='husky'",
+    "package": "standard --fix && sls package",
+    "package-dev": "npm run package",
+    "package-prod": "standard --fix && sls package -s production",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "husky": {
+    "pre-commit": "npm run test"
+  }
+}

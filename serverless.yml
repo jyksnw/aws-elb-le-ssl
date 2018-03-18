@@ -1,0 +1,30 @@
+service: aws-elb-le-ssl
+
+plugins:
+  - serverless-webpack
+
+custom:
+  webpack:
+    packager: 'yarn'
+  webpackIncludeModules: true
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: ${opt:stage, "dev"}
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - elasticloadbalancing:SetLoadBalancerListenerSSLCertificate
+      Resource: ${file(.yaml):ELB_ARN}
+
+functions:
+  update_certificate:
+    handler: handler.update_certificate
+    events:
+      - sns: ${file(.yaml):SNS_ARN}
+    environment:
+      ELB_ARN: ${file(.yaml):ELB_ARN}
+      ELB_NAME: ${file(.yaml):ELB_NAME}
+      ELB_CNAME: ${file(.yaml):ELB_CNAME}
